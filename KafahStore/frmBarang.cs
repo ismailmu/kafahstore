@@ -141,18 +141,22 @@ namespace KafahStore
                 if (ket.Length > MyUtil.MAX_FIELD_LENGTH)
                 {
                     ket_1 = ket.Substring(MyUtil.MAX_FIELD_LENGTH);
-                    ket = ket.Substring(0, MyUtil.MAX_FIELD_LENGTH);
                 }
 
                 if (ket_1.Length > MyUtil.MAX_FIELD_LENGTH)
                 {
                     ket_2 = ket_1.Substring(MyUtil.MAX_FIELD_LENGTH);
+                    ket_1 = ket_1.Substring(0, MyUtil.MAX_FIELD_LENGTH);
                 }
 
                 if (ket_2.Length > MyUtil.MAX_FIELD_LENGTH)
                 {
                     ket_3 = ket_2.Substring(MyUtil.MAX_FIELD_LENGTH);
+                    ket_2 = ket_2.Substring(0, MyUtil.MAX_FIELD_LENGTH);
                 }
+
+
+                ket = ket.Substring(0, MyUtil.MAX_FIELD_LENGTH);
 
                 if (flag == 0)
                 {
@@ -209,6 +213,8 @@ namespace KafahStore
 
                 MyUtil.ExecuteNonQuery(sql);
                 MessageBox.Show("Save Sukses", "Save", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                btnCancel.PerformClick();
             }
             catch (Exception ex)
             {
@@ -222,6 +228,7 @@ namespace KafahStore
             cboUnit.SelectedIndex = 0;
             flag = 0; //insert
             txtBerat.Text = "1000";
+            txtSatuan.Text = "1 pcs";
             txtId.ReadOnly = false;
             txtId.Focus();
         }
@@ -241,6 +248,7 @@ namespace KafahStore
             txtBerat.Text = "1000";
             txtId.ReadOnly = false;
             txtId.Focus();
+            this.barangTableAdapter.Fill(this.kafahStoreDb.m_barang);
         }
 
         private void btnBrowse1_Click(object sender, EventArgs e)
@@ -382,7 +390,7 @@ namespace KafahStore
                 localReport.EnableExternalImages = true;
 
                 localReport.ReportPath = @"REPORT\RptBarang.rdlc"; //String.Format(@"{0}\{1}\{2}", myAppPath, Properties.Settings.Default.report_path,"RptBarang.rdlc");
-                DataSet dstBarang = MyUtil.ExecuteReader("SELECT * FROM m_barang", "dstBarang", "m_barang");
+                DataSet dstBarang = MyUtil.ExecuteReader("SELECT * FROM m_barang order by nama", "dstBarang", "m_barang");
 
                 ReportDataSource dsBarang = new ReportDataSource("dsBarang");
                 dsBarang.Value = dstBarang.Tables["m_barang"];
